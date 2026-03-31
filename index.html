@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbjudan till föreläsning: Grundlagsändringen</title>
+    <style>
+        :root {
+            --navy: #0f2744;
+            --navy-soft: #1f426a;
+            --paper: #ffffff;
+            --mist: #eef3f7;
+            --stone: #5a6776;
+            --ink: #1b2430;
+            --gold: #c3922e;
+            --line: #d7e0e8;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Avenir Next", Avenir, "Segoe UI", Helvetica, Arial, sans-serif;
+            background: linear-gradient(180deg, #e8eef4 0%, #f5f7fa 100%);
+            -webkit-font-smoothing: antialiased;
+        }
+        table {
+            border-collapse: collapse;
+        }
+        img {
+            display: block;
+            max-width: 100%;
+            border: 0;
+        }
+        .shell {
+            padding: 28px 0;
+        }
+        .frame {
+            max-width: 640px;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 18px 42px rgba(15, 39, 68, 0.12);
+        }
+        .eyebrow {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.78);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2.8px;
+            font-weight: 600;
+        }
+        .brand-mark {
+            width: 148px;
+            margin: 18px auto 0 auto;
+        }
+        .hero-title {
+            margin: 16px 0 0 0;
+            color: #ffffff;
+            font-size: 32px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+        .hero-copy {
+            margin: 18px auto 0 auto;
+            max-width: 470px;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .feature-banner {
+            width: 100%;
+            height: auto;
+            max-height: 220px;
+            object-fit: cover;
+            object-position: center;
+        }
+        .section-pad {
+            padding-left: 40px;
+            padding-right: 40px;
+        }
+        .section-kicker {
+            margin: 0 0 10px 0;
+            color: var(--navy-soft);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+        .section-title {
+            margin: 0;
+            color: var(--ink);
+            font-size: 28px;
+            line-height: 1.2;
+        }
+        .section-copy {
+            margin: 14px 0 0 0;
+            color: var(--stone);
+            font-size: 16px;
+            line-height: 1.7;
+        }
+        .people-wrap {
+            background: linear-gradient(180deg, #f9fbfd 0%, #edf3f8 100%);
+            border-top: 1px solid var(--line);
+            border-bottom: 1px solid var(--line);
+        }
+        .person-cell {
+            width: 50%;
+            padding: 0 12px;
+            vertical-align: top;
+        }
+        .portrait {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 5;
+            object-fit: cover;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #cbd6e2, #eef3f8);
+        }
+        .person-name {
+            margin: 18px 0 0 0;
+            color: var(--ink);
+            font-size: 22px;
+            line-height: 1.2;
+            font-weight: 700;
+        }
+        .person-role {
+            margin: 8px 0 0 0;
+            color: var(--gold);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.8px;
+            font-weight: 700;
+        }
+        .person-copy {
+            margin: 12px 0 0 0;
+            color: var(--stone);
+            font-size: 15px;
+            line-height: 1.65;
+        }
+        .person-link {
+            margin: 14px 0 0 0;
+        }
+        .person-link a {
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(15, 39, 68, 0.28);
+        }
+        .info-box {
+            border-left: 4px solid var(--gold);
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+        .cta {
+            display: inline-block;
+            background: var(--navy);
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 700;
+            text-decoration: none;
+            padding: 16px 30px;
+            border-radius: 999px;
+        }
+        .secondary-link {
+            margin: 16px 0 0 0;
+            color: var(--navy-soft);
+            font-size: 14px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .secondary-link a {
+            color: var(--navy);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(15, 39, 68, 0.28);
+        }
+        .meta-note {
+            margin: 0 0 10px 0;
+            color: #444444;
+            font-size: 14px;
+            line-height: 1.5;
+            text-align: center;
+        }
+        .fine-print {
+            margin: 0;
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 15px;
+        }
+        @media screen and (max-width: 620px) {
+            .shell {
+                padding: 0;
+            }
+            .frame {
+                border-radius: 0;
+            }
+            .section-pad {
+                padding-left: 24px !important;
+                padding-right: 24px !important;
+            }
+            .hero-title {
+                font-size: 28px !important;
+            }
+            .person-cell {
+                display: block;
+                width: 100% !important;
+                padding: 0 0 28px 0 !important;
+            }
+            .stack-gap-last {
+                padding-bottom: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Bakgrund -->
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" class="shell">
+        <tr>
+            <td align="center">
+                
+                <!-- Huvudbehållare -->
+                <table width="100%" bgcolor="#ffffff" cellpadding="0" cellspacing="0" border="0" class="frame" style="max-width: 640px;">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td bgcolor="#0f2744" style="padding: 52px 30px 48px 30px; text-align: center; background: linear-gradient(135deg, #102845 0%, #193b61 65%, #315881 100%);">
+                            <p class="eyebrow">Inbjudan till föreläsning</p>
+                            <h1 class="hero-title">Den stundande grundlagsändringen</h1>
+                            <p class="hero-copy">
+                                En kväll om ett vägval som kan göra det betydligt svårare för Sverige att lämna EU.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Banner -->
+                    <tr>
+                        <td>
+                            <img src="banner.jpeg" alt="Banner med Sveriges riksdag och plenisal" class="feature-banner">
+                        </td>
+                    </tr>
+
+                    <!-- Inledningstext -->
+                    <tr>
+                        <td class="section-pad" style="padding-top: 40px; padding-bottom: 28px;">
+                            <p class="section-kicker" style="text-align: center;">Kvällens fokus</p>
+                            <p style="margin: 0; color: #1b2430; font-size: 20px; line-height: 1.6; font-weight: 700; text-align: center;">
+                                Välkommen att lyssna, ställa frågor och fördjupa dig i en avgörande förändring av Sveriges grundlag.
+                            </p>
+                            <p style="margin: 18px 0 0 0; color: #5a6776; font-size: 16px; line-height: 1.7; text-align: center;">
+                                Välkommen in för att lyssna samt ta möjligheten att ställa frågor kring denna avgörande grundlagsändring.
+                            </p>
+                            <p style="margin: 16px 0 0 0; color: #0f2744; font-size: 16px; line-height: 1.7; text-align: center; font-weight: 700;">
+                                Går från ett demokratiskt majoritetsstyre till ett odemokratiskt minoritetsstyre i grundlagsfrågor.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Medverkande -->
+                    <tr>
+                        <td class="section-pad people-wrap" style="padding-top: 36px; padding-bottom: 36px;">
+                            <p class="section-kicker" style="text-align: center;">Medverkande</p>
+                            <h2 class="section-title" style="text-align: center;">Talare och moderator</h2>
+                            <p class="section-copy" style="text-align: center; max-width: 500px; margin-left: auto; margin-right: auto;">
+                                Två tydliga röster leder samtalet under kvällen.
+                            </p>
+                            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top: 28px;">
+                                <tr>
+                                    <td class="person-cell">
+                                        <img src="ulf-strom.jpg" alt="Porträtt av Ulf Ström" class="portrait">
+                                        <p class="person-role">Föreläsare</p>
+                                        <p class="person-name">Ulf Ström</p>
+                                        <p class="person-copy">
+                                            Oberoende talesman för Ambition Sverige i EU-frågor.
+                                        </p>
+                                        <p class="person-link">
+                                            <a href="https://ambitionsverige.se/politiker/ulf-strom/" target="_blank">Läs Ulfs profil</a>
+                                        </p>
+                                    </td>
+                                    <td class="person-cell stack-gap-last">
+                                        <img src="barbara-aberg.jpg" alt="Porträtt av Barbara Åberg" class="portrait">
+                                        <p class="person-role">Moderator</p>
+                                        <p class="person-name">Barbara Åberg</p>
+                                        <p class="person-copy">
+                                            Leder kvällens samtal och öppnar för frågor från deltagarna under föreläsningen.
+                                        </p>
+                                        <p class="person-link">
+                                            <a href="https://ambitionsverige.se/politiker/barbara-aberg/" target="_blank">Läs Barbaras profil</a>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Informationsruta -->
+                    <tr>
+                        <td class="section-pad" style="padding-top: 28px; padding-bottom: 10px;">
+                            <table width="100%" cellpadding="25" cellspacing="0" border="0" class="info-box">
+                                <tr>
+                                    <td style="color: #333333; font-size: 16px; line-height: 1.6;">
+                                        <p style="margin: 0 0 15px 0;">
+                                            <strong>Föreläsare:</strong> Ulf Ström<br>
+                                            <span style="font-size: 14px; color: #666666;">(Oberoende talesman för Ambition Sverige i EU-frågor)</span>
+                                        </p>
+                                        <p style="margin: 0 0 15px 0;">
+                                            <strong>Moderator:</strong> Barbara Åberg
+                                        </p>
+                                        <p style="margin: 0;">
+                                            <strong>När:</strong> Måndag 13 april kl 19:00 – 20:00<br>
+                                            <span style="color: #d97706; font-size: 14px; font-weight: bold;">Mötesrummet öppnar kl 18:55</span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Knapp (Call to action) -->
+                    <tr>
+                        <td align="center" class="section-pad" style="padding-top: 30px; padding-bottom: 30px;">
+                            <!-- BYT UT LÄNKEN NEDAN -->
+                            <a href="[KLISTRA IN DIN ZOOM-LÄNK HÄR]" target="_blank" class="cta">
+                                Anslut till Zoom-mötet här
+                            </a>
+                            <p class="secondary-link">
+                                Se även simuleringen av grundlagsändringen:
+                                <a href="https://voteringstavlan.onrender.com/" target="_blank">voteringstavlan.onrender.com</a>
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Viktig information (Villkor och inspelning) -->
+                    <tr>
+                        <td class="section-pad" style="padding-top: 0; padding-bottom: 32px;">
+                            <p class="meta-note">
+                                ⚠️ Zoom-mötet kan ta emot max <strong>[XX]</strong> deltagare. <em>Först till kvarn gäller!</em>
+                            </p>
+                            <p class="fine-print">
+                                För er som inte har möjlighet att delta, så kommer vi spela in föreläsningen och skicka ut denna till Ambition Sveriges medlemmar i efterhand.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Avslutning / Footer -->
+                    <tr>
+                        <td bgcolor="#e2e8f0" style="padding: 32px 30px; text-align: center;">
+                            <p style="margin: 0; color: #1e293b; font-size: 18px; font-weight: bold;">
+                                Varmt välkommen på föreläsning 13 april!
+                            </p>
+                            <p style="margin: 10px 0 0 0; color: #475569; font-size: 16px;">
+                                Hälsar<br>
+                                <strong style="color: #003366; font-size: 18px;">Ambition Sverige</strong>
+                            </p>
+                            <img src="ambition-sverige-partibeteckning.svg" alt="Ambition Sverige" class="brand-mark">
+                        </td>
+                    </tr>
+
+                </table>
+                <!-- Slut Huvudbehållare -->
+
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>
