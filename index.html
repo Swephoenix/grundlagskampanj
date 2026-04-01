@@ -151,6 +151,23 @@
             border-radius: 12px;
             background: #f8fafc;
         }
+        .info-copy {
+            color: var(--ink);
+            font-size: 17px;
+            line-height: 1.75;
+        }
+        .info-label {
+            color: var(--navy);
+            font-weight: 700;
+        }
+        .info-note {
+            display: inline-block;
+            margin-top: 8px;
+            color: #b45309;
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 700;
+        }
         .cta {
             display: inline-block;
             background: var(--navy);
@@ -162,7 +179,7 @@
             border-radius: 999px;
         }
         .secondary-link {
-            margin: 16px 0 0 0;
+            margin: 22px 0 0 0;
             color: var(--navy-soft);
             font-size: 14px;
             line-height: 1.6;
@@ -302,17 +319,11 @@
                         <td class="section-pad" style="padding-top: 28px; padding-bottom: 10px;">
                             <table width="100%" cellpadding="25" cellspacing="0" border="0" class="info-box">
                                 <tr>
-                                    <td style="color: #333333; font-size: 16px; line-height: 1.6;">
-                                        <p style="margin: 0 0 15px 0;">
-                                            <strong>Föreläsare:</strong> Ulf Ström<br>
-                                            <span style="font-size: 14px; color: #666666;">(Oberoende talesman för Ambition Sverige i EU-frågor)</span>
-                                        </p>
-                                        <p style="margin: 0 0 15px 0;">
-                                            <strong>Moderator:</strong> Barbara Åberg
-                                        </p>
+                                    <td class="info-copy">
                                         <p style="margin: 0;">
-                                            <strong>När:</strong> Måndag 13 april kl 19:00 – 20:00<br>
-                                            <span style="color: #d97706; font-size: 14px; font-weight: bold;">Mötesrummet öppnar kl 18:55</span>
+                                            <span class="info-label">Datum:</span> Måndag 13 april<br>
+                                            <span class="info-label">Tid:</span> 19:00 - 20:00<br>
+                                            <span class="info-note">Mötesrummet öppnar kl 18:55</span>
                                         </p>
                                     </td>
                                 </tr>
@@ -322,7 +333,7 @@
 
                     <!-- Knapp (Call to action) -->
                     <tr>
-                        <td align="center" class="section-pad" style="padding-top: 30px; padding-bottom: 30px;">
+                        <td align="center" class="section-pad" style="padding-top: 20px; padding-bottom: 30px;">
                             <a href="https://us06web.zoom.us/j/88593846684?pwd=CeS6CU0vC8FpLOjIo8Yk1wgnrepZh8.1" target="_blank" class="cta">
                                 Anslut till Zoom-mötet här
                             </a>
