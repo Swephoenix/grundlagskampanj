@@ -91,6 +91,7 @@ bert@example.com
 ```
 
 Det fungerar ocksa om filen har fler kolumner, sa lange varje rad innehaller en e-postadress.
+Det finns en exempel-fil i projektet: `mottagare.example.csv`.
 
 ## Om bilder
 
