@@ -37,7 +37,7 @@ Den exponerar:
 
 ## Skicka mejl via HTTP
 
-Alla mottagare skickas som `Bcc`. Faltet `To` satts till avsandaradressen.
+Alla mottagare skickas som dolda kuvertmottagare. Inga `To`, `Cc` eller `Bcc`-huvuden laggs till i det levererade mejlet, skriptet stoppar utskicket om ett sadant huvud anda skulle finnas, och varje mottagare skickas i ett separat SMTP-anrop for att minimera risken for adresslackage.
 
 ```bash
 curl -X POST http://127.0.0.1:8080/send \

@@ -137,7 +137,6 @@ def replace_local_images(html: str, base_dir: Path) -> Tuple[str, List[Tuple[Pat
 
 def build_message(
     config: Dict[str, str],
-    to_addresses: Iterable[str],
     subject: str,
     html: str,
     text: str = "",
@@ -152,8 +151,6 @@ def build_message(
     message = EmailMessage()
     message["Subject"] = subject
     message["From"] = from_header
-    message["To"] = sender_email
-    message["Bcc"] = ", ".join(to_addresses)
     message.set_content(text or "This email contains HTML content.")
     message.add_alternative(rewritten_html, subtype="html")
 
@@ -176,13 +173,30 @@ def build_message(
     return message
 
 
-def send_via_smtp(config: Dict[str, str], message: EmailMessage) -> None:
+def validate_blind_only_headers(message: EmailMessage) -> None:
+    for header in ("To", "Cc", "Bcc"):
+        if message.get(header):
+            raise ValueError(f"Recipient privacy check failed: '{header}' header must not be set")
+
+
+def _send_with_server(server: smtplib.SMTP, message: EmailMessage, recipients: List[str]) -> None:
+    for recipient in recipients:
+        server.send_message(message, to_addrs=[recipient])
+
+
+def send_via_smtp(config: Dict[str, str], message: EmailMessage, to_addresses: Iterable[str]) -> None:
     host = require(config, "SMTP_HOST")
     port = int(config.get("SMTP_PORT", "465"))
     username = require(config, "SMTP_USERNAME")
     password = require(config, "SMTP_PASSWORD")
     security = config.get("SMTP_SECURITY", "ssl").strip().lower()
     timeout = int(config.get("SMTP_TIMEOUT", "30"))
+    recipients = list(to_addresses)
+
+    if not recipients:
+        raise ValueError("Missing recipient list")
+
+    validate_blind_only_headers(message)
 
     if security not in {"ssl", "starttls", "none"}:
         raise ValueError("SMTP_SECURITY must be one of: ssl, starttls, none")
@@ -191,7 +205,7 @@ def send_via_smtp(config: Dict[str, str], message: EmailMessage) -> None:
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL(host, port, timeout=timeout, context=context) as server:
             server.login(username, password)
-            server.send_message(message)
+            _send_with_server(server, message, recipients)
         return
 
     with smtplib.SMTP(host, port, timeout=timeout) as server:
@@ -201,7 +215,7 @@ def send_via_smtp(config: Dict[str, str], message: EmailMessage) -> None:
             server.starttls(context=context)
             server.ehlo()
         server.login(username, password)
-        server.send_message(message)
+        _send_with_server(server, message, recipients)
 
 
 def read_body(payload: bytes) -> Dict[str, object]:
@@ -273,14 +287,13 @@ class SMTPHandler(BaseHTTPRequestHandler):
 
             message = build_message(
                 config=config,
-                to_addresses=to_addresses,
                 subject=subject,
                 html=str(html_content),
                 text=text,
                 base_dir=base_dir,
             )
-            send_via_smtp(config, message)
-            json_response(self, 200, {"ok": True, "sent_to": to_addresses, "subject": subject})
+            send_via_smtp(config, message, to_addresses)
+            json_response(self, 200, {"ok": True, "sent_count": len(to_addresses), "subject": subject})
         except Exception as exc:  # pragma: no cover
             json_response(self, 400, {"ok": False, "error": str(exc)})
 
@@ -310,14 +323,13 @@ def cli_send(args: argparse.Namespace) -> None:
     recipients = parse_recipients_input(args.to, args.to_csv_file)
     message = build_message(
         config=config,
-        to_addresses=recipients,
         subject=args.subject,
         html=html,
         text=args.text,
         base_dir=html_path.parent,
     )
-    send_via_smtp(config, message)
-    print(f"Sent to {', '.join(recipients)}")
+    send_via_smtp(config, message, recipients)
+    print(f"Sent to {len(recipients)} recipient(s)")
 
 
 def main() -> None:
