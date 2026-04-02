@@ -37,6 +37,8 @@ Den exponerar:
 
 ## Skicka mejl via HTTP
 
+Alla mottagare skickas som `Bcc`. Faltet `To` satts till avsandaradressen.
+
 ```bash
 curl -X POST http://127.0.0.1:8080/send \
   -H "Content-Type: application/json" \

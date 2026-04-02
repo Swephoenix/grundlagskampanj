@@ -152,7 +152,8 @@ def build_message(
     message = EmailMessage()
     message["Subject"] = subject
     message["From"] = from_header
-    message["To"] = ", ".join(to_addresses)
+    message["To"] = sender_email
+    message["Bcc"] = ", ".join(to_addresses)
     message.set_content(text or "This email contains HTML content.")
     message.add_alternative(rewritten_html, subtype="html")
 
