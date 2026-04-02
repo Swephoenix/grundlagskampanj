@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import csv
 import json
 import mimetypes
 import os
@@ -58,6 +59,54 @@ def require(config: Dict[str, str], key: str) -> str:
 
 def parse_recipients(value: str) -> List[str]:
     return [item.strip() for item in value.split(",") if item.strip()]
+
+
+def resolve_project_path(path_value: str, label: str) -> Path:
+    file_path = (ROOT / path_value).resolve()
+    try:
+        file_path.relative_to(ROOT)
+    except ValueError as exc:
+        raise ValueError(f"{label} must point inside the project directory") from exc
+    return file_path
+
+
+def load_recipients_from_csv(csv_path: Path) -> List[str]:
+    recipients: List[str] = []
+
+    with csv_path.open("r", encoding="utf-8-sig", newline="") as handle:
+        reader = csv.reader(handle)
+        for row in reader:
+            stripped = [cell.strip() for cell in row]
+            if not any(stripped):
+                continue
+            for cell in stripped:
+                if "@" in cell:
+                    recipients.extend(parse_recipients(cell))
+                    break
+
+    deduped: List[str] = []
+    seen = set()
+    for recipient in recipients:
+        if recipient not in seen:
+            seen.add(recipient)
+            deduped.append(recipient)
+    return deduped
+
+
+def parse_recipients_input(raw_recipients: object, csv_file: object = None) -> List[str]:
+    if csv_file:
+        csv_path = resolve_project_path(str(csv_file), "to_csv_file")
+        if not csv_path.exists() or not csv_path.is_file():
+            raise ValueError("to_csv_file does not exist")
+        recipients = load_recipients_from_csv(csv_path)
+    elif isinstance(raw_recipients, list):
+        recipients = [str(item).strip() for item in raw_recipients if str(item).strip()]
+    else:
+        recipients = parse_recipients(str(raw_recipients or ""))
+
+    if not recipients:
+        raise ValueError("Missing recipient list")
+    return recipients
 
 
 def replace_local_images(html: str, base_dir: Path) -> Tuple[str, List[Tuple[Path, str]]]:
@@ -204,12 +253,7 @@ class SMTPHandler(BaseHTTPRequestHandler):
             config = env_config(self.server.env_path)
 
             recipients = payload.get("to") or config.get("DEFAULT_TO", "")
-            if isinstance(recipients, list):
-                to_addresses = [str(item).strip() for item in recipients if str(item).strip()]
-            else:
-                to_addresses = parse_recipients(str(recipients))
-            if not to_addresses:
-                raise ValueError("Missing recipient list")
+            to_addresses = parse_recipients_input(recipients, payload.get("to_csv_file"))
 
             subject = str(payload.get("subject") or "HTML email")
             html_file = payload.get("html_file")
@@ -217,11 +261,7 @@ class SMTPHandler(BaseHTTPRequestHandler):
             text = str(payload.get("text") or "")
 
             if html_file:
-                html_path = (ROOT / str(html_file)).resolve()
-                try:
-                    html_path.relative_to(ROOT)
-                except ValueError as exc:
-                    raise ValueError("html_file must point inside the project directory") from exc
+                html_path = resolve_project_path(str(html_file), "html_file")
                 html_content = html_path.read_text(encoding="utf-8")
                 base_dir = html_path.parent
             elif html_content:
@@ -266,7 +306,7 @@ def cli_send(args: argparse.Namespace) -> None:
     config = env_config(Path(args.env))
     html_path = Path(args.html_file).resolve()
     html = html_path.read_text(encoding="utf-8")
-    recipients = parse_recipients(args.to)
+    recipients = parse_recipients_input(args.to, args.to_csv_file)
     message = build_message(
         config=config,
         to_addresses=recipients,
@@ -285,7 +325,9 @@ def main() -> None:
     subparsers = parser.add_subparsers(dest="command")
 
     send_parser = subparsers.add_parser("send", help="Send one email directly from the CLI")
-    send_parser.add_argument("--to", required=True, help="Comma-separated recipient list")
+    recipient_group = send_parser.add_mutually_exclusive_group(required=True)
+    recipient_group.add_argument("--to", help="Comma-separated recipient list")
+    recipient_group.add_argument("--to-csv-file", help="CSV file inside the project directory with recipient emails")
     send_parser.add_argument("--subject", required=True, help="Email subject")
     send_parser.add_argument("--html-file", required=True, help="Path to HTML file")
     send_parser.add_argument("--text", default="", help="Plain-text fallback")

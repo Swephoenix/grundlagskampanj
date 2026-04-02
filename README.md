@@ -48,6 +48,19 @@ curl -X POST http://127.0.0.1:8080/send \
   }'
 ```
 
+Du kan ocksa lasa mottagare fran en CSV-fil i projektmappen:
+
+```bash
+curl -X POST http://127.0.0.1:8080/send \
+  -H "Content-Type: application/json" \
+  -d '{
+    "to_csv_file": "mottagare.csv",
+    "subject": "Inbjudan till forelasning",
+    "html_file": "email.html",
+    "text": "Om HTML inte visas, oppna mejlet i en klient som visar HTML."
+  }'
+```
+
 ## Skicka mejl via CLI
 
 ```bash
@@ -57,6 +70,27 @@ python3 smtp_server.py send \
   --html-file email.html \
   --text "HTML-version finns i mejlet."
 ```
+
+Eller via CSV-fil:
+
+```bash
+python3 smtp_server.py send \
+  --to-csv-file mottagare.csv \
+  --subject "Inbjudan till forelasning" \
+  --html-file email.html \
+  --text "HTML-version finns i mejlet."
+```
+
+## CSV-format
+
+CSV-filen ska ligga i projektmappen. Skriptet letar efter den forsta cellen med en e-postadress pa varje rad och ignorerar tomma rader.
+
+```csv
+anna@example.com
+bert@example.com
+```
+
+Det fungerar ocksa om filen har fler kolumner, sa lange varje rad innehaller en e-postadress.
 
 ## Om bilder
 
